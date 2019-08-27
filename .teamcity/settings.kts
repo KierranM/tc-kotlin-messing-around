@@ -1,42 +1,42 @@
 import jetbrains.buildServer.configs.kotlin.v2018_2.*
 import jetbrains.buildServer.configs.kotlin.v2018_2.buildSteps.script
-
-/*
-The settings script is an entry point for defining a TeamCity
-project hierarchy. The script should contain a single call to the
-project() function with a Project instance or an init function as
-an argument.
-
-VcsRoots, BuildTypes, Templates, and subprojects can be
-registered inside the project using the vcsRoot(), buildType(),
-template(), and subProject() methods respectively.
-
-To debug settings scripts in command-line, run the
-
-    mvnDebug org.jetbrains.teamcity:teamcity-configs-maven-plugin:generate
-
-command and attach your debugger to the port 8000.
-
-To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
--> Tool Windows -> Maven Projects), find the generate task node
-(Plugins -> teamcity-configs -> teamcity-configs:generate), the
-'Debug' option is available in the context menu for the task.
-*/
+import java.time.LocalDate
+import java.time.Month
 
 version = "2019.1"
 
 project {
-
     buildType(ChristmasBuild)
+
+    buildType(SayHello("Jessie"))
+    buildType(SayHello("Ash"))
+    buildType(SayHello("Sam"))
 }
+
+open class SayHello(val person: String) : BuildType({
+    name = "Say Hello to $person"
+    id("Hello $person".toId())
+
+    steps {
+        script {
+            name = "Hello $person"
+            scriptContent = "echo Hello $person"
+        }
+    }
+})
 
 object ChristmasBuild : BuildType({
     name = "Hello World"
 
     steps {
-        script {
-            name = "Merry Christmas"
-            scriptContent = """echo "MERRY CHRISTMAS!!""""
+        val date = LocalDate.now()
+        if (date.month == Month.DECEMBER && date.dayOfMonth == 25) {
+            script {
+                name = "Merry Christmas"
+                scriptContent = """
+                    echo "MERRY CHRISTMAS!!"
+                """.trimIndent()
+            }
         }
         script {
             name = "Hello World"
