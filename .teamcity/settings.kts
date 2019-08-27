@@ -13,7 +13,7 @@ object ChristmasBuild : BuildType({
     name = "Hello World"
     steps {
         val date = LocalDate.now()
-        if (date.month == Month.DECEMBER && date.dayOfMonth == 25) {
+        if (date.month == Month.AUGUST && date.dayOfMonth == 27) {
             script {
                 name = "Merry Christmas"
                 scriptContent = """
