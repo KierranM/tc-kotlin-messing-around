@@ -11,6 +11,16 @@ project {
     buildType(SayHello("Jessie"))
     buildType(SayHello("Ash"))
     buildType(SayHello("Sam"))
+
+    val people = listOf(
+            "Julie",
+            "Jessup",
+            "Jackson",
+            "John"
+    )
+    for (person in people) {
+        buildType(SayHello(person))
+    }
 }
 
 open class SayHello(val person: String) : BuildType({
